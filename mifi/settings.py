@@ -1,5 +1,5 @@
 #!/usr/bin/python
-MODEM_IP = '192.168.210.214'
+MODEM_IP = '192.168.1.1'
 MODEM_PASS = 'admin'
 
 # In most cases you don't need to change these:
