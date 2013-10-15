@@ -19,7 +19,6 @@ import pycurl
 import settings
 import re
 import StringIO
-import MySQLdb as mdb
 import sys
 import datetime
 import os
