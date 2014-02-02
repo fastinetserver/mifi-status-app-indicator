@@ -16,8 +16,11 @@ Please let me know if you have any questions.
 
 
 1) Specify correct settings in the settings.py file, e.g.:
+
+```
 MODEM_IP = '192.168.1.1'
 MODEM_PASS = 'admin'
+```
 
 2) Run
 ./mifi_status.py
