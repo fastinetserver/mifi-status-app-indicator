@@ -1,7 +1,12 @@
 mifi-status-app-indicator
 =========================
 
-Gnome Applet Indicator for mifi modem (Displays signal strength, IP address, battery status, allows to reboot modem) Tested under ubuntu 11.10
+Gnome Applet Indicator for mifi modem (Displays signal strength, IP address, battery status, allows to reboot modem)
+
+Tested under:
+- ubuntu 11.10
+- ubuntu 12.04
+- Linux Mint
 
 ![ScreenShot](https://raw2.github.com/fastinetserver/mifi-status-app-indicator/master/screenshots/mifi-ghome-applet.png)
 
