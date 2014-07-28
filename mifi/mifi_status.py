@@ -14,19 +14,11 @@
 # If not, see <http://www.gnu.org/licenses/>.
 
 import appindicator
-import pynotify
 import gtk
 import gobject
 
-import time
-import settings
-import datetime
 from tools import *
-import os
-from lxml import html
 import hashlib
-
-import re
 
 pwtoken_search=re.compile('var pwtoken = "([\w]+)"', re.DOTALL)
 stoken_search=re.compile('<input type="hidden" name="stoken" value="([\w]+)">', re.DOTALL)
@@ -81,10 +73,17 @@ class Inter():
     def quit(self, item):
             gtk.main_quit()
     
+    def remove_cookie(self):
+        try:
+            os.remove(self.tmp_dir+'/cookie.txt')
+        except OSError:
+            pass        
+    
     def do_restart_modem(self):
         """This method restarts/reboots mifi modem"""
+        self.remove_cookie()
         stage='1 - get tokens'
-        content, code=get_page('http://'+settings.MODEM_IP, self.tmp_dir, stage, None, False, None, False, True,'Get projects list')
+        content, code=get_page('http://'+settings.MODEM_IP, self.tmp_dir, stage, None, False, None, False, True)
         matches = pwtoken_search.search(content)
         if matches:
             pwtoken = matches.group(1)
@@ -102,11 +101,11 @@ class Inter():
         stage='2 - login'
         AdPassword=hashlib.sha1(settings.MODEM_PASS+pwtoken).hexdigest()        
         post_fields='buttonlogin=Login&AdPassword='+AdPassword+'&todo=login&nextfile=home.html&stoken='+stoken
-        content, code=get_page('http://'+settings.MODEM_IP+'/login.cgi', self.tmp_dir, stage, None, False, post_fields, False, True,'Get projects list')
+        content, code=get_page('http://'+settings.MODEM_IP+'/login.cgi', self.tmp_dir, stage, None, False, post_fields, False, True)
 
         stage='3 - restart'
         post_fields='todo=restart&nextfile=home.html&stoken='+stoken
-        content, code=get_page('http://'+settings.MODEM_IP+'/login.cgi', self.tmp_dir, stage, None, False, post_fields, False, True,'Get projects list')
+        content, code=get_page('http://'+settings.MODEM_IP+'/login.cgi', self.tmp_dir, stage, None, False, post_fields, False, True)
 
     def restart_modem(self, action=None):
         """This method is try...except a wrapper around self.do_restart_modem()"""
@@ -116,8 +115,9 @@ class Inter():
             print err
 
     def do_refresh_modem_status(self):
+        self.remove_cookie()
         stage='1 - Get Modem Status'
-        content, code=get_page('http://'+settings.MODEM_IP+'/getStatus.cgi?dataType=TEXT', self.tmp_dir, stage, None, False, None, False, True,'Get projects list')
+        content, code=get_page('http://'+settings.MODEM_IP+'/getStatus.cgi?dataType=TEXT', self.tmp_dir, stage, None, False, None, False, True)
 #        print content
         if content is None:
             return
